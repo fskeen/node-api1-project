@@ -25,13 +25,29 @@ server.get(`/api/users`, (req, res) => {
 server.post(`/api/users`, (req, res) => {
     // Creates a user using the information sent inside the `request body`.
 
-    res.status(200).json(hobbits)
+    Users.insert(req.body)
+        .then(user => {
+            res.status(201).json(user);
+        })
+        .catch(() => {
+            res.status(500).json({
+                errorMessage: "There was an error while saving the user to the database."
+            })
+        })
 })
 
 server.get(`/api/users/:id`, (req, res) => {
     // Returns the user object with the specified `id`. 
-
-    res.status(200).json(hobbits)
+    Users.findById(req.params.id)
+        .then(user => {
+            if (user) {
+                res.status(200).json(user);
+            } else {
+                res.status(404).json( {
+                    message: "User with that id does not exist."
+                })
+            }
+        })
 })
 
 server.put(`/api/users/:id`, (req, res) => {
