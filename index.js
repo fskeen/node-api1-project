@@ -48,6 +48,11 @@ server.get(`/api/users/:id`, (req, res) => {
                 })
             }
         })
+        .catch(() => {
+            res.status(500).json({
+                errorMessage: "Error retrieving user from the server."
+            })
+        })
 })
 
 server.put(`/api/users/:id`, (req, res) => {
